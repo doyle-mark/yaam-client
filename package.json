@@ -9,6 +9,7 @@
     "leaflet": "^1.5.1",
     "leaflet-rotatedmarker": "^0.2.0",
     "link-module-alias": "^1.2.0",
+    "memoize-one": "^5.1.1",
     "react": "^16.8.6",
     "react-animations": "^1.0.0",
     "react-chartjs-2": "^2.7.6",

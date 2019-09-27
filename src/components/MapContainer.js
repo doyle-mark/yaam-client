@@ -13,6 +13,7 @@ import {
 import FIRPolygons from "./map_components/FIRPolys";
 import AircraftMarkerManager from "./map_components/AircraftMarkerManager";
 import AircraftPath from "./map_components/AircraftPath";
+import AirportMarkers from "./map_components/AirportMarkers";
 
 // Inital Constants
 
@@ -61,6 +62,7 @@ class MapContainer extends Component {
         <AircraftMarkerManager isDarkMode={settings.isDarkMode} theme={settings.themeColors} focusedData={focusedData} pilots={pilots} bounds={bounds} zoom={zoom} alwaysShowTooltip={true} />
         <FIRPolygons atc={atc} show={settings.toggleFIRs}/>
         <AircraftPath {...{ trail }} />
+        <AirportMarkers />
       </Map>
     );
   }
