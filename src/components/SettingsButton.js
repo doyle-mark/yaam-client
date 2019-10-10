@@ -38,18 +38,8 @@ class SettingsButton extends Component {
             </Button>
             <Card style={{backgroundColor: theme.primary, color: theme.textPrimary}} className={cardClasses.join(' ')}>
                 <Form>
-                    <FormGroup style={{display: "flex", justifyContent: "space-between"}}>
-                    <label htmlFor="toggleColorMode">Night Mode</label>
-                    <div id="toggleColorMode">
-                        <Switch onChange={() => this.props.toggleColorMode()} checked={this.props.isDarkMode} {...switchStyle}/>
-                    </div>
-                    </FormGroup>
-                    <FormGroup style={{display: "flex", justifyContent: "space-between"}}>
-                    <label htmlFor="enableFIRs">Show FIRs</label>
-                    <div id="enableFIRs">
-                        <Switch onChange={(sw) => this.props.toggleFIRs(sw)} checked={this.props.showFIRs} {...switchStyle}/>
-                    </div>
-                    </FormGroup>
+                    <FormSwitch title="Night Mode" onChange={() => this.props.toggleColorMode()} checked={this.props.isDarkMode}/>
+                    <FormSwitch title="Show FIRs" onChange={(sw) => this.props.toggleFIRs(sw)} checked={this.props.showFIRs}/>
                 </Form>
             </Card>
           </div>
@@ -60,6 +50,15 @@ class SettingsButton extends Component {
         this.setState({ settings: { ...this.state.settings, switch1: checked }});
     }
 }
+
+const FormSwitch = ({title, onChange, checked}) => (
+  <FormGroup style={{display: "flex", justifyContent: "space-between"}}>
+    <label htmlFor={title.split(' ').join('-')}>{title}</label>
+    <div id={title.split(' ').join('-')}>
+        <Switch onChange={onChange} checked={checked} {...switchStyle}/>
+    </div>
+  </FormGroup>
+)
 
 const switchStyle = {
     onColor: "#86d3ff",
