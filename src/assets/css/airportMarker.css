@@ -1,10 +1,14 @@
 .airport-marker {
   background: none;
   font-weight: bold;
+  opacity: .8;
   text-align: center;
 }
 
-.airport-marker p, .airport-marker svg {
-  margin: 0;
-  text-align: center;
+.airport-marker:hover {
+  cursor: grab;
+}
+.airport-marker svg {
+  display: block;
+  margin: auto;
 }

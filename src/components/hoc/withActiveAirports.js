@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import memoize from "memoize-one";
+import { CONTROLLER_TYPE } from "../map_components/ControllerBadge";
 
 
 const withActiveAirports = (WrappedComponent) => {
@@ -56,15 +57,16 @@ const withActiveAirports = (WrappedComponent) => {
       atcData.forEach((controller, index) => {
         if (controller) {
           const icao = controller.callsign.substr(0, 4);
-  
           // We are expecting the first 4 letters to be an ICAO code.          
           if (icao.match(/[A-Z]{4}/g)) {
+            const type = this.toControllerType(controller.callsign)
+            if (type === CONTROLLER_TYPE.ATIS) return;
             // If the airport does not exists in our javascript object, we initalize it.
             if (!activeAirports[icao]){
               activeAirports[icao] = {}
             }      
             // Insert the index to the appropriate array OR initalize it if it doesn't exist.
-            activeAirports[icao].controllers ? activeAirports[icao].controllers.push(index) : activeAirports[icao].controllers = [index];
+            activeAirports[icao].controllers ? activeAirports[icao].controllers.push(type) : activeAirports[icao].controllers = [type];
           }
         }
       });
@@ -78,20 +80,41 @@ const withActiveAirports = (WrappedComponent) => {
           }
         }
       });
-  
-      console.log('Pilots ', pilotData.length);
-      console.log('Controllers ', atcData.length);
-      
       console.timeEnd('createActiveAirportArray');
       return activeAirports;
     });
-  
+    
+    toControllerType = (callsign) => {
+      const exp  = /_([A-Z]{3})/g;
+      const match = exp.exec(callsign);
+      if(match) {
+        const prefix = match[1];
+        switch (prefix) {
+          case 'DEL':
+            return CONTROLLER_TYPE.DELIVERY;
+          case 'GND':
+            return CONTROLLER_TYPE.GROUND;
+          case 'TWR':
+            return CONTROLLER_TYPE.TOWER;
+          case 'APP':
+            return CONTROLLER_TYPE.APPROACH;
+          case 'ATI':
+            return CONTROLLER_TYPE.ATIS;
+          default:
+            return -1;
+        }
+      } else {
+        return null;
+      }
+      
+    }
+
     render() {
       const { pilotData, atcData } = this.props;
       const { airportData } = this.state;
       const activeAirports = this.createActiveAirportArray(pilotData, atcData, airportData);
       
-      return (<WrappedComponent {...WrappedComponent.props} data={activeAirports}/>)
+      return (<WrappedComponent {...this.props} data={activeAirports}/>)
     }
   }
 }
