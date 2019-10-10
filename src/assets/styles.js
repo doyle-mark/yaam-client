@@ -17,6 +17,7 @@ export const LIGHT_MODE = {
         outside: 'lightblue',
         inside: 'darkblue'
     },
+    approachCircle: '#3388ff',
     controllerBadgeColors: {
         delivery: '#29ABE2',
         ground: '#0071BC',
@@ -36,6 +37,7 @@ export const DARK_MODE = {
         outside: '#FF0000',
         inside: '#8B0000'
     },
+    approachCircle: '#FF0000',
     controllerBadgeColors: {
         delivery: '#F08080',
         ground: '#DC143C',

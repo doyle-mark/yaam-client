@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { renderToString } from "react-dom/server";
-import { Marker } from "react-leaflet";
+import { Marker, Circle } from "react-leaflet";
 import { divIcon } from "leaflet";
 import { CONTROLLER_TYPE, ControllerBadges } from "./ControllerBadge";
+
+// nm to
+const APPROACH_CIRCLE_RADIUS = 1852 * 40;
 
 export default class AirportMarker extends Component {
   constructor(props) {
@@ -43,11 +46,23 @@ export default class AirportMarker extends Component {
       iconAnchor: [xOffset/2, yOffset]
     });
 
+    const ApproachCircle = ({show, position, color}) => {
+      if (show) {
+        return (
+          <Circle center={[position[0], position[1]]} color={color}radius={APPROACH_CIRCLE_RADIUS} />
+        )
+      }
+      return null;
+    }
+
     return (
-      <Marker
-        position={[lat, long]}
-        icon={icon}
-      />
+      <>
+        <Marker
+          position={[lat, long]}
+          icon={icon}
+        />
+        <ApproachCircle position={[lat, long]} color={themeColors.approachCircle} show={controllers.indexOf(CONTROLLER_TYPE.APPROACH) !== -1} />
+      </>
     );
   }
 }
