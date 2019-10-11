@@ -20,6 +20,10 @@
   color: white !important;
 }
 
+.dropdown-menu-dark button:hover {
+  background-color: #7e7e7e !important;
+}
+
 .dropdown-menu::-webkit-scrollbar {
   width: 6px;
   height: 6px;
