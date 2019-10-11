@@ -9,8 +9,7 @@ const ON_GROUND_MAX_SPEED = 50;
 
 export default class AircraftMarkerManager extends Component {
   render() {
-    const { pilots, bounds, focusedData, zoom,
-             } = this.props;
+    const { pilots, bounds, focusedData, zoom } = this.props;
     const iconSize = zoom+19;
 
     
