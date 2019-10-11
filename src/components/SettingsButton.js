@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { Button, Card, Form, FormGroup } from "shards-react";
-import { FaCog } from "react-icons/fa";
+import { FaCog, FaAcquisitionsIncorporated } from "react-icons/fa";
 import { connect } from 'react-redux'
 import Switch from "react-switch";
 import "../assets/css/Settings.css"
-import { toggleFIRs, toggleColorMode } from "../redux/settingsActions";
+import { toggleFIRs, toggleColorMode, toggleAirportMarkerATCBadges, toggleAirportMarkers, toggleAirportMarkerApproachCircle } from "../redux/settingsActions";
 
 class SettingsButton extends Component {
     constructor(props) {
@@ -26,7 +26,7 @@ class SettingsButton extends Component {
           cardClasses.push('settingsCardOpen')
         }
 
-        const { theme } = this.props
+        const { theme, airportMarkerVisibility, isDarkMode } = this.props
 
         return (
           <div className={containerClasses.join(" ")}>
@@ -38,8 +38,24 @@ class SettingsButton extends Component {
             </Button>
             <Card style={{backgroundColor: theme.primary, color: theme.textPrimary}} className={cardClasses.join(' ')}>
                 <Form>
-                    <FormSwitch title="Night Mode" onChange={() => this.props.toggleColorMode()} checked={this.props.isDarkMode}/>
-                    <FormSwitch title="Show FIRs" onChange={(sw) => this.props.toggleFIRs(sw)} checked={this.props.showFIRs}/>
+                    <FormSwitch title="Night Mode" onChange={() => this.props.toggleColorMode()} checked={isDarkMode} isDarkMode={isDarkMode}/>
+                    <FormSwitch title="Show FIRs" onChange={(sw) => this.props.toggleFIRs(sw)} checked={this.props.showFIRs} isDarkMode={isDarkMode} />
+                    <FormSwitch title="Show Airport Markers" onChange={() => this.props.toggleAirportMarkers()} checked={airportMarkerVisibility.enabled} isDarkMode={isDarkMode}/>
+                    {
+                      airportMarkerVisibility.enabled && (
+                        <div style={{fontSize: '0.8em', marginLeft: '20%'}}>
+
+                        <FormSwitch title="Show Controller Badges" onChange={(sw) => this.props.toggleAirportMarkerATCBadges()} 
+                        checked={airportMarkerVisibility.showControllerBadges} isDarkMode={isDarkMode} subSection
+                        />
+
+                        <FormSwitch title="Show Approach Circle" onChange={(sw) => this.props.toggleAirportMarkerApproachCircle()} 
+                        checked={airportMarkerVisibility.showApproachCircle} isDarkMode={isDarkMode} subSection
+                        />
+
+                        </div>
+                        )
+                    }
                 </Form>
             </Card>
           </div>
@@ -51,14 +67,25 @@ class SettingsButton extends Component {
     }
 }
 
-const FormSwitch = ({title, onChange, checked}) => (
-  <FormGroup style={{display: "flex", justifyContent: "space-between"}}>
-    <label htmlFor={title.split(' ').join('-')}>{title}</label>
-    <div id={title.split(' ').join('-')}>
-        <Switch onChange={onChange} checked={checked} {...switchStyle}/>
-    </div>
-  </FormGroup>
-)
+const FormSwitch = ({title, onChange, checked, subSection, isDarkMode}) => {
+
+  let style = switchStyle;
+  if (subSection) {
+    style = subSwitchStyle
+  }
+  if (isDarkMode) {
+    style = {...style, ...darkSwitchStyle}
+  }
+
+  return (
+    <FormGroup style={{display: "flex", justifyContent: "space-between"}}>
+      <label htmlFor={title.split(' ').join('-')}>{title}</label>
+      <div id={title.split(' ').join('-')}>
+          <Switch onChange={onChange} checked={checked} {...style}/>
+      </div>
+    </FormGroup>
+  )
+}
 
 const switchStyle = {
     onColor: "#86d3ff",
@@ -69,17 +96,35 @@ const switchStyle = {
     boxShadow: "0px 1px 5px rgba(0, 0, 0, 0.6)",
     activeBoxShadow: "0px 0px 1px 10px rgba(0, 0, 0, 0.2)",
     height: 20,
-    width: 48,
+    width: 40,
+}
+
+const darkSwitchStyle = {
+  onColor: '#666666',
+  offColor: '#333333',
+  onHandleColor: '#000',
+  offHandleColor: '#000',
+}
+
+const subSwitchStyle = {
+  ...switchStyle,
+  handleDiameter: 15,
+  height: 15,
+  width: 30,
 }
 
 const mapStateToProps = (state) => ({
   showFIRs: state.settings.toggleFIRs,
-  isDarkMode: state.settings.isDarkMode
+  isDarkMode: state.settings.isDarkMode,
+  airportMarkerVisibility: state.settings.airportMarkerVisibility,
 })
 
 const mapDispatchToProps = {
   toggleFIRs,
-  toggleColorMode
+  toggleColorMode,
+  toggleAirportMarkerATCBadges,
+  toggleAirportMarkerApproachCircle,
+  toggleAirportMarkers,
 }
 
 

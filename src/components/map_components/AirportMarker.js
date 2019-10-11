@@ -15,17 +15,19 @@ export default class AirportMarker extends Component {
   }
 
   render() {
-    const { lat, long, name, code, zoom, controllers, themeColors } = this.props;
+    const { lat, long, name, code, zoom, controllers, themeColors, settings } = this.props;
     
     let size = zoom*2;
     if (size > 16) size = 16;
 
-    const divIconInnerHTML = `
+    let divIconInnerHTML = `
     <svg width="${size}" height="${size}">
       <circle cx="${size/2}" cy="${size/2}" fill=${themeColors.airportMarker.outside} r="${size/2}" />
       <circle cx="${size/2}" cy="${size/2}" fill=${themeColors.airportMarker.inside} r="${size/4}" />
-    </svg>` + 
-    `${renderToString(<ControllerBadges themeColors={themeColors} zoom={zoom} controllers={controllers}/>)}`;
+    </svg>`;
+    if (settings.showControllerBadges) {
+      divIconInnerHTML +=  `${renderToString(<ControllerBadges themeColors={themeColors} zoom={zoom} controllers={controllers}/>)}`;
+    }
 
 
     // MAGIC! I was dealing with a lot of changing font sizes and the badges being the way I built them, 
@@ -55,13 +57,15 @@ export default class AirportMarker extends Component {
       return null;
     }
 
+    const showApproachCircle = controllers.indexOf(CONTROLLER_TYPE.APPROACH) !== -1 && settings.showApproachCircle;
+
     return (
       <>
         <Marker
           position={[lat, long]}
           icon={icon}
         />
-        <ApproachCircle position={[lat, long]} color={themeColors.approachCircle} show={controllers.indexOf(CONTROLLER_TYPE.APPROACH) !== -1} />
+        <ApproachCircle position={[lat, long]} color={themeColors.approachCircle} show={showApproachCircle} />
       </>
     );
   }

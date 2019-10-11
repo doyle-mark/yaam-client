@@ -5,14 +5,16 @@ import AirportMarker from './AirportMarker';
 import { connect } from 'react-redux'
 
 function AirportMarkerManager(props) {
-  const { data, bounds, zoom, themeColors } = props;
+  const { data, bounds, zoom, themeColors, settings } = props;
   const airports = Object.values(data);
+
+  if (!settings.enabled) return null;
   
   return airports.map((airport, key) => {
     if (airport.lat && airport.long) {
       if (isInBounds({lat: airport.lat, long: airport.long}, bounds)) {
         if(!airport.controllers) return null;
-        return (<AirportMarker zoom={zoom} themeColors={themeColors} lat={airport.lat} key={key} {...airport}/>)
+        return (<AirportMarker zoom={zoom} settings={settings} themeColors={themeColors} lat={airport.lat} key={key} {...airport}/>)
       }
     }
     return null;
@@ -33,7 +35,8 @@ const isInBounds = (coords, bounds) => {
 };
 
 const mapStateToProps = (state) => ({
-  themeColors: state.settings.themeColors
+  themeColors: state.settings.themeColors,
+  settings: state.settings.airportMarkerVisibility
 })
 
 
