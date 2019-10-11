@@ -106,7 +106,7 @@ const mapDispatchToProps = {
 }
 
 const mapStateToProps = (state) => ({
-    allStations: [...state.allAircraft.pilots, ...state.allAircraft.atc]
+    allStations: state.allAircraft.pilots
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search)
