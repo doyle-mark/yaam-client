@@ -60,7 +60,7 @@ const withActiveAirports = (WrappedComponent) => {
           // We are expecting the first 4 letters to be an ICAO code.          
           if (icao.match(/[A-Z]{4}/g)) {
             const type = this.toControllerType(controller.callsign)
-            if (type === CONTROLLER_TYPE.ATIS) return;
+            if (type === CONTROLLER_TYPE.ATIS || type === -1) return;
             // If the airport does not exists in our javascript object, we initalize it.
             if (!activeAirports[icao]){
               activeAirports[icao] = {}
