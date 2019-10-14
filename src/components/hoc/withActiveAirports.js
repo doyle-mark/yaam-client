@@ -15,7 +15,7 @@ const withActiveAirports = (WrappedComponent) => {
     }
 
     async componentDidMount() {
-      const res = await fetch('http://localhost:5000/airports');
+      const res = await fetch(process.env.REACT_APP_API_ADDR+'/airports');
       const airportData = await res.json();
       this.setState({airportData})
     }
