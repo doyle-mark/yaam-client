@@ -1,14 +1,16 @@
 .airport-marker {
   background: none;
+  font-family: 'Poppins';
   font-weight: bold;
   opacity: .8;
   text-align: center;
+  display: flex;
 }
 
 .airport-marker:hover {
   cursor: grab;
 }
+
 .airport-marker svg {
-  display: block;
-  margin: auto;
+  margin-right: 5px;
 }

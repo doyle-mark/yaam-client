@@ -20,13 +20,13 @@ export default class AirportMarker extends Component {
     let size = zoom*2;
     if (size > 16) size = 16;
 
-    let divIconInnerHTML = `
+    let divIconInnerHTML = `<div>
     <svg width="${size}" height="${size}">
       <circle cx="${size/2}" cy="${size/2}" fill=${themeColors.airportMarker.outside} r="${size/2}" />
       <circle cx="${size/2}" cy="${size/2}" fill=${themeColors.airportMarker.inside} r="${size/4}" />
-    </svg>`;
+    </svg></div>`;
     if (settings.showControllerBadges) {
-      divIconInnerHTML +=  `${renderToString(<ControllerBadges themeColors={themeColors} zoom={zoom} controllers={controllers}/>)}`;
+      divIconInnerHTML +=  `${renderToString(<ControllerBadges code={code} themeColors={themeColors} zoom={zoom} controllers={controllers}/>)}`;
     }
 
 
@@ -43,9 +43,8 @@ export default class AirportMarker extends Component {
 
     const icon = divIcon({
       html: divIconInnerHTML,
-      iconSize: [xOffset, 50],
       className: "airport-marker",
-      iconAnchor: [xOffset/2, yOffset]
+      iconAnchor: [size/2, size/2]
     });
 
     const ApproachCircle = ({show, position, color}) => {

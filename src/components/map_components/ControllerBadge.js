@@ -1,12 +1,12 @@
 import React from "react";
 
 export const ControllerBadges = props => {
-  let { controllers, zoom, themeColors } = props;
+  let { controllers, zoom, themeColors, code } = props;
   controllers.sort();
 
   controllers = [...new Set(controllers)] ;
 
-  const maxFontSize = 1.5;
+  const maxFontSize = 1.2;
   const minFontSize = 1;
 
   const fontSize = zoom / 5 > maxFontSize ? maxFontSize : zoom / 5 < minFontSize ? minFontSize : zoom / 5;
@@ -36,14 +36,11 @@ export const ControllerBadges = props => {
   
   return (
     <div>
+      <div style={{ ...firstStyle, backgroundColor: themeColors.primary, color: themeColors.textPrimary, fontWeight: 'normal' }}>{code.icao}</div>
       {
         controllers.map((type, index) => {
           const badgeDetails = getBadgeDetails(type, themeColors.controllerBadgeColors);
-          if(index === 0) {
-            return (<div style={{ ...firstStyle, backgroundColor: badgeDetails.color }}>{badgeDetails.letter}</div>);
-          } else {
-            return (<div style={{ ...otherStyle, backgroundColor: badgeDetails.color, zIndex: index * -1 }}>{badgeDetails.letter}</div>);
-          }
+          return (<div style={{ ...otherStyle, backgroundColor: badgeDetails.color, zIndex: (index+1) * -1 }}>{badgeDetails.letter}</div>);
         })
       }
     </div>
