@@ -2,7 +2,7 @@
 <img src="https://i.imgur.com/Z36Ky91.png" alt="logo" width="300px"></img>
 </p>
 
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/designed-in-ms-paint.svg)](https://forthebadge.com)![enter image description here](https://img.shields.io/badge/version-0.2-orange?style=for-the-badge) ![enter image description here](https://img.shields.io/badge/PR-sure-blue?style=for-the-badge) ![enter image description here](https://img.shields.io/badge/webapp-up-green?style=for-the-badge)
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/designed-in-ms-paint.svg)](https://forthebadge.com)![enter image description here](https://img.shields.io/badge/version-0.4-orange?style=for-the-badge) ![enter image description here](https://img.shields.io/badge/PR-sure-blue?style=for-the-badge) ![enter image description here](https://img.shields.io/badge/webapp-up-green?style=for-the-badge)
 
 
 
