@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import { renderToString } from "react-dom/server";
 import { Marker, Circle } from "react-leaflet";
 import { divIcon } from "leaflet";
@@ -15,7 +14,7 @@ export default class AirportMarker extends Component {
   }
 
   render() {
-    const { lat, long, name, code, zoom, controllers, themeColors, settings } = this.props;
+    const { lat, long, code, zoom, controllers, themeColors, settings } = this.props;
     
     let size = zoom*2;
     if (size > 16) size = 16;
@@ -28,18 +27,6 @@ export default class AirportMarker extends Component {
     if (settings.showControllerBadges) {
       divIconInnerHTML +=  `${renderToString(<ControllerBadges code={code} themeColors={themeColors} zoom={zoom} controllers={controllers}/>)}`;
     }
-
-
-    // MAGIC! I was dealing with a lot of changing font sizes and the badges being the way I built them, 
-    // I came with this formula for specifying the icon size. What you are seeing is mostily coverting the "em" value to a pixel size.
-    const maxFontSizeMultiplier = 1.5;
-    const minFontSizeMultiplier = 1;
-    const defaultFontSize = 12
-    const fontSizeMultiplier = zoom / 5 > maxFontSizeMultiplier ? maxFontSizeMultiplier : zoom / 5 < minFontSizeMultiplier ? minFontSizeMultiplier : zoom / 5;
-    const fontSize = defaultFontSize * fontSizeMultiplier;
-
-    const xOffset = 1.25 * fontSize + ((1.5 * fontSize) * controllers.length - 1);
-    const yOffset = size/2;
 
     const icon = divIcon({
       html: divIconInnerHTML,
@@ -69,4 +56,3 @@ export default class AirportMarker extends Component {
     );
   }
 }
-const controllers = [CONTROLLER_TYPE.APPROACH, CONTROLLER_TYPE.GROUND, CONTROLLER_TYPE.TOWER];

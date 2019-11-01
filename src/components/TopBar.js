@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Navbar, NavbarBrand, NavItem, Nav, NavLink } from "shards-react";
+import { Navbar, NavbarBrand } from "shards-react";
 import Search from "./Search";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css"

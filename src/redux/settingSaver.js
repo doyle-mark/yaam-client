@@ -1,5 +1,5 @@
 import store from "./store";
-import { DARK_MODE, LIGHT_MODE } from "../assets/styles";
+import { LIGHT_MODE } from "../assets/styles";
 
 const defaultSettings = {
   toggleFIRs: true,

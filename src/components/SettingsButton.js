@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Card, Form, FormGroup } from "shards-react";
-import { FaCog, FaAcquisitionsIncorporated } from "react-icons/fa";
+import { FaCog } from "react-icons/fa";
 import { connect } from 'react-redux'
 import Switch from "react-switch";
 import "../assets/css/Settings.css"

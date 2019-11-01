@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { FormGroup, FormInput, Button, InputGroup, InputGroupAddon, InputGroupText, Dropdown, DropdownMenu, DropdownItem } from "shards-react";
+import { FormInput, InputGroup, InputGroupAddon, InputGroupText, Dropdown, DropdownMenu, DropdownItem } from "shards-react";
 import '../assets/css/search.css'
 import fetchAircraftExtendedData from "../lib/focusOnAircraft";
 import { unFocusAircraft } from "../redux/actions";
@@ -17,8 +17,8 @@ class Search extends Component {
     }
     
     render() {
-        const { searchResults, searchValue } = this.state;
-        const { style, isDarkMode } = this.props;
+        const { searchResults } = this.state;
+        const { isDarkMode } = this.props;
 
         let dropdownMenuClass = isDarkMode ? 'dropdown-menu-dark' : '';
         let searchBarClass = isDarkMode ? 'searchBar-dark' : '';
@@ -44,7 +44,7 @@ class Search extends Component {
                           const depICAO = dep == null ? '' : dep.code == null ? '' : dep.code.icao == null ? '' : dep.code.icao
                           const arrICAO = arr == null ? '' : arr.code == null ? '' : arr.code.icao == null ? '' : arr.code.icao
                           // Took me a while to get the regex right, but what it basically does is remove all the slashes and stuff.
-                          let formattedAircraft = aircraft == null ? null : aircraft.match(/(?:[\w\/])?([\d\w]{4})/);
+                          let formattedAircraft = aircraft == null ? null : aircraft.match(/(?:[w/])?([\d\w]{4})/);
                           
                           formattedAircraft = formattedAircraft == null ? '' : formattedAircraft[1]
                           const flightplanText = depICAO === '' && arrICAO === '' ? "No Flightplan" : `${depICAO} - ${arrICAO}`
@@ -94,10 +94,6 @@ const searchInStations = (stations, searchValue) => {
   } else {   
       return [];
   }
-}
-const dropdownMenuStyle = {
-    height: "5rem",
-    overflowY: "scroll"
 }
 
 const mapDispatchToProps = {

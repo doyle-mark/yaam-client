@@ -40,7 +40,7 @@ export const ControllerBadges = props => {
       {
         controllers.map((type, index) => {
           const badgeDetails = getBadgeDetails(type, themeColors.controllerBadgeColors);
-          return (<div style={{ ...otherStyle, backgroundColor: badgeDetails.color, zIndex: (index+1) * -1 }}>{badgeDetails.letter}</div>);
+          return (<div key={index} style={{ ...otherStyle, backgroundColor: badgeDetails.color, zIndex: (index+1) * -1 }}>{badgeDetails.letter}</div>);
         })
       }
     </div>

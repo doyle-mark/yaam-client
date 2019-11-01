@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { getDistance } from 'geolib';
-import { FaArrowCircleRight, FaPlaneArrival, FaPlaneDeparture, FaPlane } from "react-icons/fa";
+import { FaPlane } from "react-icons/fa";
 import {
   Card,
   CardBody,
@@ -8,13 +8,11 @@ import {
   Badge
 } from "shards-react";
 
-const ON_GROUND_MAX_SPEED = 50;
 
 export default class FlightHistory extends Component {
   render() {
     const {
       callsign,
-      airline,
       aircraft,
       dep,
       arr,
