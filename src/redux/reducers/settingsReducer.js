@@ -1,4 +1,5 @@
 import { TOGGLE_FIRS, TOGGLE_COLOR_MODE, TOGGLE_AIRPORT_MARKER, TOGGLE_AIRPORT_MARKER_APPROACH_CIRCLE, TOGGLE_AIRPORT_MARKER_ATC_BADGES} from "../actionTypes";
+import { DARK_MODE, LIGHT_MODE } from "../../assets/styles";
 
 export default (state, { type, payload }) => {
     switch (type) {
