@@ -14,6 +14,7 @@ import FIRPolygons from "./map_components/FIRPolys";
 import AircraftMarkerManager from "./map_components/AircraftMarkerManager";
 import AircraftPath from "./map_components/AircraftPath";
 import AirportMarkerManager from "./map_components/AirportMarkerManager";
+import PredicitveRender from "./hoc/PredicitveRender";
 
 // Inital Constants
 
@@ -72,7 +73,7 @@ class MapContainer extends Component {
         <FIRPolygons atc={atc} show={settings.toggleFIRs}/>
         <AirportMarkerManager bounds={bounds} zoom={zoom} />
         <AircraftPath trail={focusedTrail} localPosition={focusedLocalPosition} />
-        <AircraftMarkerManager isDarkMode={settings.isDarkMode} theme={settings.themeColors} focusedData={focusedData} pilots={pilots} bounds={bounds} zoom={zoom} alwaysShowTooltip={true} />
+        <PredicitveRender isDarkMode={settings.isDarkMode} theme={settings.themeColors} focusedData={focusedData} pilots={pilots} bounds={bounds} zoom={zoom} alwaysShowTooltip={true} />
       </Map>
     );
   }
