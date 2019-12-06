@@ -13,21 +13,7 @@ function MapContainer(props) {
   }
   const [mapState, setMapState] = useState(initalMapState);
   const focused = useSelector(state => state.focused);
-  // const mapRef = useRef(null);
-
-  // useEffect(() => {
-  //   if (map !== null) {
-  //     map.on("moveend", e => {
-  //       const mapElement = e.target;
-  //       setMapState({
-  //         zoom: mapElement.getZoom(),
-  //         center: mapElement.getCenter(),
-  //         bounds: mapElement.getBounds(),
-  //       });
-  //     });
-  //   }
-  // }, [map])
-
+  
   const moveHandler = event => {
     const mapElement = event.target;
     setMapState({
