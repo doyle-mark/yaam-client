@@ -1,24 +1,31 @@
-import React, { Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Polyline } from "react-leaflet";
-export default class AircraftPath extends Component {
-    render() {
-        let { trail, localPosition } = this.props;
-        if (trail != null) {
 
-            trail = trail.filter((point) => {
-                const {lat, lng, alt} = point;
-                return (lat != null && lng != null && alt != null);
-            })
+function AirplaneTrail(props) {
+    const { data, position } = props;
 
-            // Somtimes the client and server are not in sync (when requesting a focused aircraft), so we make sure the trail isn't ahead.
-            if(trail[0].lat !== localPosition.lat || trail[0].lng !== localPosition.long){
-                console.log("oops its ahead");
-                trail.shift()
-            }
+    if (data) {
+        // Filter data for invalid points.
+        const trail = data.filter((point) => {
+            const {lat, lng, alt} = point;
+            return (lat != null && lng != null && alt != null);
+        })
 
-            return (<Polyline positions={trail} />);
-        } else {
-            return null;
+        if(trail[0].lat !== position.lat || trail[0].lng !== position.long){
+            trail.shift()
         }
+
+        return (<Polyline positions={trail} />);
     }
+    
+    return null;
 }
+
+AirplaneTrail.propTypes = {
+    data: PropTypes.array,
+    position: PropTypes.object,
+}
+
+export default AirplaneTrail
+

@@ -31,7 +31,7 @@ function Airplane(props) {
   
   return(
     <>
-      <AirplaneMarker position={position} heading={heading} />
+      <AirplaneMarker position={position} heading={heading} callsign={callsign}/>
 
       <AirplaneTooltip 
         callsign={callsign} 
@@ -42,7 +42,7 @@ function Airplane(props) {
         arr={arr}
       />
 
-      { focused && (<AirplaneTrail data={airplaneTrailData} />)}
+      <AirplaneTrail data={airplaneTrailData} position={position} />
     </>
   )
 }

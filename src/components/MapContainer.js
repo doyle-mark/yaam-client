@@ -3,7 +3,7 @@ import L from "leaflet";
 import { Map, TileLayer } from "react-leaflet";
 import { connect } from "react-redux";
 import "../assets/css/tooltip.css";
-import { fetchAllData } from "../redux/thunks";
+import { fetchAllData, focusOnAirplane } from "../redux/thunks";
 import FIRPolygons from "./map_components/FIRPolys";
 import AirplaneManager from "./airplane/AirplaneManager";
 import AirportMarkerManager from "./map_components/AirportMarkerManager";
