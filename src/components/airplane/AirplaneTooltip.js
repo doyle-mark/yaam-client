@@ -1,22 +1,24 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
-import { Tooltip } from "react-leaflet";
+import { Tooltip, useLeaflet } from "react-leaflet";
+import '../../assets/css/tooltip.css'
 
 function AirplaneTooltip(props) {
   const { callsign, dep, arr, visible } = props;
   const theme = useSelector(state => state.settings.themeColors);
-
+  const leaflet = useLeaflet();
+  
   // Check if object or its properties are a null.
   const depIcao = dep == null ? "" : dep.code == null ? "" : dep.code.icao;
   const arrIcao = arr == null ? "" : arr.code == null ? "" : arr.code.icao;
-
+  
   return (
     <Tooltip
-      permanent={visible}
       offset={[0, -10]}
       direction={"top"}
       style={{ border: "none" }}
+      on
     >
       <div
         style={{

@@ -1,158 +1,99 @@
-import React, { Component } from "react";
+import React, {useState, useCallback, useEffect, useRef} from 'react'
+import { useSelector } from "react-redux";
 import L from "leaflet";
-import { Map, TileLayer } from "react-leaflet";
-import { connect } from "react-redux";
-import "../assets/css/tooltip.css";
-import { fetchAllData, focusOnAirplane } from "../redux/thunks";
-import FIRPolygons from "./map_components/FIRPolys";
+import { Map, TileLayer, useLeaflet } from "react-leaflet";
 import AirplaneManager from "./airplane/AirplaneManager";
-import AirportMarkerManager from "./map_components/AirportMarkerManager";
+import FIRManager from './map_components/FIRManager';
 
-// Inital Constants
-
-const DEFAULT_BOUNDS = L.latLngBounds(L.latLng(90, -180), L.latLng(-90, 180));
-const UPDATE_TIME = 30;
-
-const LIGHT_TILES = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
-const DARK_TILES = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-const ATTR =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
-const DEFAULT_CENTER = [30, 0];
-const DEFAULT_ZOOM_LEVEL = 3;
-
-class MapContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [],
-      FIRs: null,
-      bounds: L.latLngBounds(L.latLng(90, -180), L.latLng(-90, 180)),
-      center: DEFAULT_CENTER,
-      zoom: DEFAULT_ZOOM_LEVEL,
-    };
+function MapContainer(props) {
+  const initalMapState = {
+    bounds: MAP_CONFIG.DEFAULT_BOUNDS,
+    center: MAP_CONFIG.DEFAULT_CENTER,
+    zoom: MAP_CONFIG.DEFAULT_ZOOM_LEVEL,
   }
+  const [mapState, setMapState] = useState(initalMapState);
+  const focused = useSelector(state => state.focused);
+  // const mapRef = useRef(null);
 
-  render() {
-    const { bounds, zoom, center } = this.state;
-    const { onlineData, settings} = this.props;
-    const { atc } = onlineData;
+  // useEffect(() => {
+  //   if (map !== null) {
+  //     map.on("moveend", e => {
+  //       const mapElement = e.target;
+  //       setMapState({
+  //         zoom: mapElement.getZoom(),
+  //         center: mapElement.getCenter(),
+  //         bounds: mapElement.getBounds(),
+  //       });
+  //     });
+  //   }
+  // }, [map])
 
-    const tiles = settings.isDarkMode ? DARK_TILES : LIGHT_TILES;
-    return (
-      <Map
-        ref="map"
-        center={center}
-        maxBounds={DEFAULT_BOUNDS}
-        maxBoundsViscosity={0.9}
-        zoom={zoom}
-        minZoom={DEFAULT_ZOOM_LEVEL}
-        id="mapid"
-        doubleClickZoom={false}
-        style={{ height: "100%" }}
-        zoomControl={false}
-        preferCanvas={false}
-      >
-        <TileLayer attribution={ATTR} url={tiles} />
-        <FIRPolygons atc={atc} show={settings.toggleFIRs}/>
-        <AirportMarkerManager bounds={bounds} zoom={zoom} />
-        <AirplaneManager />
-      </Map>
-    );
+  const moveHandler = event => {
+    const mapElement = event.target;
+    setMapState({
+      zoom: mapElement.getZoom(),
+      center: mapElement.getCenter(),
+      bounds: mapElement.getBounds(),
+    });
   }
-
-  componentDidMount = () => {
-    const { fetchAllData } = this.props;
-    const { addBoundsChangeListener } = this;
-
-    fetchAllData();
-    addBoundsChangeListener();
-    setInterval(this.updateData, UPDATE_TIME * 1000);
-  };
-
-  // The map will rerender only if the viewport is changed or new data is loaded.
-  shouldComponentUpdate = (nextProps, nextState) => {
-
-    if(nextProps.onlineData !== this.props.onlineData) return true;
-    if(nextProps.focused !== this.props.focused) return true;
-    if(nextState.bounds !== this.state.bounds) return true;
-    if(nextState.center !== this.state.center) return true;
-    if(this.props.settings !== nextProps.settings) return true;
-
-    return false
-  };
-
-  // For checking if the map should goTo the focused aircrat.
-  componentDidUpdate(prevProps, prevState) {
-
-    // If the searchbar calls a focus, It'll set the goToFocused prop to true.
-    if(this.props.focused && !prevProps.focused){
-      if(this.props.goToFocused) {
-        this.goTo(this.props.focusedData)
+  
+  const mapRef = useCallback(node => {
+    if (node !== null) {
+      const l = node.leafletElement;
+      if(focused) {
+        if (focused.goTo) {
+          l.setView([focused.coords.lat, focused.coords.long], 7);
+        }
       }
     }
-  }
+  }, [focused]);
 
-  /**** Non-Lifecycle related Functions ****/
+  console.log("Re-Render");
+  
 
-  // Adds leaflet listener that updates the bounds in our state.
-  addBoundsChangeListener = () => {
-    this.refs.map.leafletElement.on("moveend", e => {
-      console.log("bounds update");
-      
-      const map = e.target;
-      const zoom = map.getZoom();
-      const center = map.getCenter();
-      const bounds = map.getBounds();
-      this.setState({ bounds, zoom, center });
-    });
-  };
+  const { zoom } = mapState;
+  const isDarkMode = useSelector(state => state.settings.isDarkMode);
+  return (
+    <Map
+        ref={mapRef}
+        id="mapid"
+        style={{ height: "100%" }}
+        center={MAP_CONFIG.DEFAULT_CENTER}
+        zoom={MAP_CONFIG.DEFAULT_ZOOM_LEVEL}
+        minZoom={MAP_CONFIG.DEFAULT_ZOOM_LEVEL}
+        maxBounds={MAP_CONFIG.DEFAULT_BOUNDS}
+        maxBoundsViscosity={MAP_CONFIG.VISCOSITY}
+        doubleClickZoom={MAP_CONFIG.DOUBLE_CLICK_ZOOM}
+        zoomControl={MAP_CONFIG.ZOOM_CONTROLS}
+        preferCanvas={MAP_CONFIG.PREFER_CANVAS}
+        onmoveend={moveHandler}
+    >
 
-  // Dispatches all redux data-fetching actions.
-  updateData = () => {
-    const {
-      fetchAllData,
-      fetchAircraftExtendedData,
-      pending,
-      focusedData
-    } = this.props;
+      <TileLayer
+        attribution={MAP_CONFIG.ATTR} 
+        url={isDarkMode ? MAP_CONFIG.DARK_TILES : MAP_CONFIG.LIGHT_TILES}
+      />
 
-    fetchAllData();
-    if (!pending && focusedData != null) {
-      fetchAircraftExtendedData(focusedData.callsign);
-    }
-  };
+      <AirplaneManager bounds={mapState.bounds} zoom={zoom}/>
 
-  // Changes the map viewport to focus on the focused aircraft
-  goTo = (station) => {
-    const { coords } = station;
-      this.setState({center: [coords.lat, coords.long ], zoom: 6})
-  };
+      <FIRManager />
 
-  // Gets the position of a focused aircraft on the map.
-  getLocalPostion = (callsign) => {
-    if (!this.props.onlineData || !this.props.focused) return null;
-
-    for (const aircraft of this.props.onlineData.pilots) {
-      if (aircraft.callsign === callsign){
-        return aircraft.coords
-      };
-    }
-  }
+    </Map>
+  )
 }
 
-/** Redux Related Functions  **/
-  
-const mapStateToProps = state => ({
-  onlineData: state.onlineData,
-  settings: state.settings,
-});
+export default MapContainer
 
-const mapDispatchToProps = {
-  fetchAllData: fetchAllData,
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MapContainer);
-
+const MAP_CONFIG = {
+  DEFAULT_BOUNDS: L.latLngBounds(L.latLng(90, -180), L.latLng(-90, 180)),
+  UPDATE_TIME: 30,
+  LIGHT_TILES: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+  DARK_TILES: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+  ATTR: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  DEFAULT_CENTER: [30, 0],
+  DEFAULT_ZOOM_LEVEL: 3,
+  VISCOSITY: 0.9,
+  PREFER_CANVAS: false,
+  ZOOM_CONTROLS: false,
+  DOUBLE_CLICK_ZOOM : false,
+}

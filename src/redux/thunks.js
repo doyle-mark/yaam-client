@@ -23,23 +23,23 @@ export const fetchAllData = () => {
 
 
 
-export const focusOnAirplane = (callsign, goTo = true) => {
+export const focusOnAirplane = (callsign, goTo = false) => {
     return async (dispatch, getState) => {
-
         // If calling a focus on the current focused airplane, unfocus.
         const { focused } = getState();
         if (focused) {
             if (focused.callsign === callsign) {
                 dispatch(unFocusAirplane());
+                return;
             }
-        } else {
-            dispatch(focusAirplanePending());
-            try {
-                const res = await getAircraftData(callsign);
-                dispatch(focusAirplaneSuccess({ ...res, goTo }));
-            } catch (error) {
-                dispatch(focusAirplaneError(error));
-            }
+        }
+
+        dispatch(focusAirplanePending());
+        try {
+            const res = await getAircraftData(callsign);
+            dispatch(focusAirplaneSuccess({ ...res, goTo }));
+        } catch (error) {
+            dispatch(focusAirplaneError(error));
         }
     }
 }

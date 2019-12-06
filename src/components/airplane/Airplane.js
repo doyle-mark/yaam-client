@@ -16,6 +16,7 @@ function Airplane(props) {
     aircraftType,
     dep,
     arr,
+    zoom,
   } = props;
 
   const focused = useSelector(state => {
@@ -31,18 +32,18 @@ function Airplane(props) {
   
   return(
     <>
-      <AirplaneMarker position={position} heading={heading} callsign={callsign}/>
+      <AirplaneMarker position={position} heading={heading} callsign={callsign} zoom={zoom}>
+        <AirplaneTooltip 
+          callsign={callsign} 
+          speed={speed} 
+          altitude={altitude} 
+          aircraftType={aircraftType}
+          dep={dep}
+          arr={arr}
+        />
+        <AirplaneTrail data={airplaneTrailData} position={position} />
+      </AirplaneMarker>
 
-      <AirplaneTooltip 
-        callsign={callsign} 
-        speed={speed} 
-        altitude={altitude} 
-        aircraftType={aircraftType}
-        dep={dep}
-        arr={arr}
-      />
-
-      <AirplaneTrail data={airplaneTrailData} position={position} />
     </>
   )
 }

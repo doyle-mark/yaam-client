@@ -2,11 +2,13 @@ import React from 'react'
 import withActiveAirports from '../hoc/withActiveAirports'
 import "../../assets/css/airportMarker.css";
 import AirportMarker from './AirportMarker';
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 function AirportMarkerManager(props) {
-  const { data, bounds, zoom, themeColors, settings } = props;
+  const { data, bounds, zoom } = props;
   const airports = Object.values(data);
+  const settings = useSelector(state => state.settings.airportMarkerVisibility);
+  const theme = useSelector(state => state.settings.themeColors);
 
   if (!settings.enabled) return null;
   
@@ -14,7 +16,7 @@ function AirportMarkerManager(props) {
     if (airport.lat && airport.long) {
       if (isInBounds({lat: airport.lat, long: airport.long}, bounds)) {
         if(!airport.controllers) return null;
-        return (<AirportMarker zoom={zoom} settings={settings} themeColors={themeColors} lat={airport.lat} key={key} {...airport}/>)
+        return (<AirportMarker zoom={zoom} settings={settings} themeColors={theme} lat={airport.lat} key={key} {...airport}/>)
       }
     }
     return null;

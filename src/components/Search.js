@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { FormInput, InputGroup, InputGroupAddon, InputGroupText, Dropdown, DropdownMenu, DropdownItem } from "shards-react";
 import '../assets/css/search.css'
 import { focusOnAirplane } from "../redux/thunks";
-import { unFocusAirplane } from "../redux/actions";
 import { MdSearch } from "react-icons/md";
 
 class Search extends Component {
@@ -69,16 +68,15 @@ class Search extends Component {
     }
 
     handleSearch = (event) => {
-        const { allStations } = this.props
+        const { onlineData } = this.props
         const searchValue = event.target.value;
         
-        const searchResults = searchInStations(allStations, searchValue);
+        const searchResults = searchInStations(onlineData, searchValue);
         this.setState({searchValue, searchResults})
     }
 
     handleClick = (callsign) => {
-      this.props.unFocusAircraft()
-      this.props.fetchAircraftExtendedData(callsign, true)
+      this.props.focusOnAirplane(callsign, true);
     }
 }
 
@@ -97,8 +95,7 @@ const searchInStations = (stations, searchValue) => {
 }
 
 const mapDispatchToProps = {
-  focusOnAirplane,
-  unFocusAirplane
+  focusOnAirplane
 }
 
 const mapStateToProps = (state) => ({

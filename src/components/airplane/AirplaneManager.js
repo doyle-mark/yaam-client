@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import PropTypes from 'prop-types'
+import { fetchAllData } from "../../redux/thunks";
 import Airplane from "./Airplane";
 
 const SHOW_GROUND_ZOOM_LEVEL = 10;
@@ -8,8 +9,9 @@ const ON_GROUND_MAX_SPEED = 50;
 
 
 function AirplaneManager(props) {
+  const { bounds, zoom } = props;
+  useAirplaneData();
   const airplanes = useSelector(state => state.onlineData.pilots);
-  
 
   return airplanes.map( (airplane, index) => {
     const { 
@@ -23,21 +25,23 @@ function AirplaneManager(props) {
       arr
     } = airplane
 
-    // if (isInBounds(position, bounds))
-    
-    return(
-      <Airplane 
-      key={index}
-      position={position} 
-      speed={speed}
-      altitude={altitude}
-      heading={heading}
-      callsign={callsign}
-      aircraftType={aircraftType}
-      dep={dep}
-      arr={arr}
-      />
-    )
+    if (isInBounds(position, bounds)) {
+      return(
+        <Airplane 
+        zoom={zoom}
+        key={index}
+        position={position} 
+        speed={speed}
+        altitude={altitude}
+        heading={heading}
+        callsign={callsign}
+        aircraftType={aircraftType}
+        dep={dep}
+        arr={arr}
+        />
+      )
+    }
+    return null;
   })
 }
 
@@ -54,7 +58,30 @@ const isInBounds = (coords, bounds) => {
   );
 };
 
+const useAirplaneData = () => {
+  const [fetchInterval, setFetchInterval] = useState();
+  const dispatch = useDispatch();
+  const UPDATE_INTERVAL = 30;
+
+  useEffect(() => {
+
+    const updateData = () => {
+      dispatch(fetchAllData());
+    }
+
+    updateData()
+    const i = setInterval(updateData, UPDATE_INTERVAL * 1000)
+    setFetchInterval(i)
+
+    return () => {
+      setInterval(null)
+    }
+  }, [dispatch])
+}
+
 AirplaneManager.propTypes = {
+  bounds: PropTypes.object,
+  zoom: PropTypes.number
 }
 
 export default AirplaneManager

@@ -58,7 +58,8 @@ function rootReducer(state, action) {
             return {
                 ...state, 
                 pending: false,
-                onlineData: { pilots: [action.payload.pilots[0]], atc: []}
+                // onlineData: { pilots: [action.payload.pilots[200]], atc: []}
+                onlineData: action.payload
             }
         case FETCH_ALL_DATA_ERROR:
             return {
