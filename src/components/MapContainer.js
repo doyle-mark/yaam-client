@@ -3,16 +3,9 @@ import L from "leaflet";
 import { Map, TileLayer } from "react-leaflet";
 import { connect } from "react-redux";
 import "../assets/css/tooltip.css";
-import fetchAllAircraftDataAction from "../lib/fetchAllAircraftData";
-import fetchAircraftExtendedData from "../lib/focusOnAircraft";
-import {
-  getAllAircraftError,
-  getAllAircraftPending,
-  getAllAircraft
-} from "../redux/reducers/rootReducer";
+import { fetchAllData } from "../redux/thunks";
 import FIRPolygons from "./map_components/FIRPolys";
-import AircraftMarkerManager from "./map_components/AircraftMarkerManager";
-import AircraftPath from "./map_components/AircraftPath";
+import AirplaneManager from "./airplane/AirplaneManager";
 import AirportMarkerManager from "./map_components/AirportMarkerManager";
 
 // Inital Constants
@@ -41,17 +34,8 @@ class MapContainer extends Component {
 
   render() {
     const { bounds, zoom, center } = this.state;
-    const { allAircraft, focusedData, settings} = this.props;
-    const { pilots, atc } = allAircraft;
-
-    let focusedTrail, focusedLocalPosition;
-
-    /* For issues where the trail might not be in sync with the map, we also pass the 
-       aircrafts positon on the map, for the AircraftPath to match between them. */
-    if (focusedData) {
-      focusedTrail = focusedData.trail;
-      focusedLocalPosition = this.getLocalPostion(focusedData.callsign);
-    }
+    const { onlineData, settings} = this.props;
+    const { atc } = onlineData;
 
     const tiles = settings.isDarkMode ? DARK_TILES : LIGHT_TILES;
     return (
@@ -71,8 +55,7 @@ class MapContainer extends Component {
         <TileLayer attribution={ATTR} url={tiles} />
         <FIRPolygons atc={atc} show={settings.toggleFIRs}/>
         <AirportMarkerManager bounds={bounds} zoom={zoom} />
-        <AircraftPath trail={focusedTrail} localPosition={focusedLocalPosition} />
-        <AircraftMarkerManager isDarkMode={settings.isDarkMode} theme={settings.themeColors} focusedData={focusedData} pilots={pilots} bounds={bounds} zoom={zoom} alwaysShowTooltip={true} />
+        <AirplaneManager />
       </Map>
     );
   }
@@ -89,7 +72,7 @@ class MapContainer extends Component {
   // The map will rerender only if the viewport is changed or new data is loaded.
   shouldComponentUpdate = (nextProps, nextState) => {
 
-    if(nextProps.allAircraft !== this.props.allAircraft) return true;
+    if(nextProps.onlineData !== this.props.onlineData) return true;
     if(nextProps.focused !== this.props.focused) return true;
     if(nextState.bounds !== this.state.bounds) return true;
     if(nextState.center !== this.state.center) return true;
@@ -147,9 +130,9 @@ class MapContainer extends Component {
 
   // Gets the position of a focused aircraft on the map.
   getLocalPostion = (callsign) => {
-    if (!this.props.allAircraft || !this.props.focused) return null;
+    if (!this.props.onlineData || !this.props.focused) return null;
 
-    for (const aircraft of this.props.allAircraft.pilots) {
+    for (const aircraft of this.props.onlineData.pilots) {
       if (aircraft.callsign === callsign){
         return aircraft.coords
       };
@@ -160,18 +143,12 @@ class MapContainer extends Component {
 /** Redux Related Functions  **/
   
 const mapStateToProps = state => ({
-  error: getAllAircraftError(state),
-  allAircraft: getAllAircraft(state),
-  pending: getAllAircraftPending(state),
-  focusedData: state.focusedData,
-  focused: state.focused,
+  onlineData: state.onlineData,
   settings: state.settings,
-  goToFocused: state.goToFocused
 });
 
 const mapDispatchToProps = {
-  fetchAllData: fetchAllAircraftDataAction,
-  fetchAircraftExtendedData
+  fetchAllData: fetchAllData,
 };
 
 export default connect(

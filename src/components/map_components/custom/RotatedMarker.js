@@ -1,10 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux'
 import { Marker as LeafletMarker } from 'leaflet';
 import { LeafletProvider, withLeaflet, MapLayer } from 'react-leaflet';
 import 'leaflet-rotatedmarker';
-import fetchAircraftExtendedData from "../../lib/focusOnAircraft";
-import { unFocusAircraft } from "../../redux/actions";
 
 class RotatedMarker extends MapLayer {
   static defaultProps = {
@@ -13,7 +10,7 @@ class RotatedMarker extends MapLayer {
 
   createLeafletElement(props) {
     const el = new LeafletMarker(props.position, this.getOptions(props));
-    el.on('click', () => this.handleClick(this.props))
+    el.on('click', this.props.handleClick);
     this.contextValue = { ...props.leaflet, popupContainer: el };
     return el;
   }
@@ -46,21 +43,6 @@ class RotatedMarker extends MapLayer {
     }
   }
 
-  /*
-  Handle focusing on the aircraft
-  */
-  handleClick(props) {
-    const { focused, fetchAircraftExtendedData, unFocusAircraft, focusedData, callsign } = props;
-    if(!focused){
-      fetchAircraftExtendedData(callsign);
-    } else if (focusedData.callsign === callsign) {
-        unFocusAircraft();
-    } else {
-      unFocusAircraft();
-      fetchAircraftExtendedData(callsign);
-    }
-  }
-
 
   render() {
     const { children } = this.props;
@@ -70,16 +52,4 @@ class RotatedMarker extends MapLayer {
   }
 }
 
-const mapStateToProps = (state) => ({
-  pending: state.pending,
-  focused: state.focused,
-  focusedData: state.focusedData
-})
-
-const mapDispatchToProps = {
-  fetchAircraftExtendedData,
-  unFocusAircraft
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(withLeaflet(RotatedMarker));
+export default withLeaflet(RotatedMarker);

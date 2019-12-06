@@ -1,12 +1,11 @@
 import { 
-    FETCH_AIRCRAFT_ERROR,
-    FETCH_AIRCRAFT_PENDING,
-    FETCH_AIRCRAFT_SUCCESS,
-    FETCH_ALL_AIRCRAFT_ERROR,
-    FETCH_ALL_AIRCRAFT_PENDING,
-    FETCH_ALL_AIRCRAFT_SUCCESS,
-    FOCUS_AIRCRAFT,
-    UNFOCUS_AIRCRAFT
+    FETCH_ALL_DATA_ERROR,
+    FETCH_ALL_DATA_PENDING,
+    FETCH_ALL_DATA_SUCCESS,
+    FOCUS_AIRPLANE_PENDING,
+    FOCUS_AIRPLANE_SUCCESS,
+    FOCUS_AIRPLANE_ERROR,
+    UNFOCUS_AIRPLANE
  } from "../actionTypes";
 
  import settingsReducer from "./settingsReducer";
@@ -24,60 +23,44 @@ function combineReducersWithRoot(rootReducer, reducers) {
     };
   }
 
-const initalState = {
-    settings: {},
-    pending: false, 
-    focused: false,
-    error: null,
-    allAircraft: {pilots: [], atc: []}
-}
 
-function rootReducer(state = initalState, action) {
+function rootReducer(state, action) {
     switch(action.type) {
-        // TODO: Look into getting rid of this, since we can use the focused aircraft data instead of dispatching twice...
-        case FOCUS_AIRCRAFT:
+        case FOCUS_AIRPLANE_SUCCESS:
             return {
                 ...state,
-                focused: true,
-                goToFocused: action.shouldGoTo
+                pending: false,
+                focused: action.payload,
             }
-        case UNFOCUS_AIRCRAFT:
+        case UNFOCUS_AIRPLANE:
             return {
                 ...state,
-                focused: false,
-                focusedData: null,
+                focused: null,
             }
-        case FETCH_AIRCRAFT_PENDING:
+        case FOCUS_AIRPLANE_PENDING:
             return {
                 ...state,
                 pending: true
             }
-        case FETCH_AIRCRAFT_SUCCESS:
-            return {
-                ...state, 
-                pending: false,
-                focusedData: action.payload
-
-            }
-        case FETCH_AIRCRAFT_ERROR:
+        case FOCUS_AIRPLANE_ERROR:
             return {
                 ...state, 
                 pending: false,
                 error: action.error,
-                focusedData: null
+                focused: null
             }
-        case FETCH_ALL_AIRCRAFT_PENDING:
+        case FETCH_ALL_DATA_PENDING:
             return {
                 ...state,
                 pending: true
             }
-        case FETCH_ALL_AIRCRAFT_SUCCESS:
+        case FETCH_ALL_DATA_SUCCESS:
             return {
                 ...state, 
                 pending: false,
-                allAircraft: action.allAircraft
+                onlineData: { pilots: [action.payload.pilots[0]], atc: []}
             }
-        case FETCH_ALL_AIRCRAFT_ERROR:
+        case FETCH_ALL_DATA_ERROR:
             return {
                 ...state, 
                 pending: false,
@@ -89,11 +72,3 @@ function rootReducer(state = initalState, action) {
 }
 
 export default combineReducersWithRoot(rootReducer, {settings: settingsReducer})
-
-export const getAircraft = state => state.aircraftFocused;
-export const getAircraftPending = state => state.pending;
-export const getAircraftError = state => state.error;
-
-export const getAllAircraft = state => state.allAircraft;
-export const getAllAircraftPending = state => state.pending;
-export const getAllAircraftError = state => state.error;

@@ -120,8 +120,8 @@ const withActiveAirports = (WrappedComponent) => {
 }
 
 const mapStateToProps = state => ({
-  pilotData: state.allAircraft.pilots,
-  atcData: state.allAircraft.atc,
+  pilotData: state.onlineData.pilots,
+  atcData: state.onlineData.atc,
 })
 
 export default WrapperComponent => connect(mapStateToProps)(withActiveAirports(WrapperComponent))

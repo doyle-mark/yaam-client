@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { FormInput, InputGroup, InputGroupAddon, InputGroupText, Dropdown, DropdownMenu, DropdownItem } from "shards-react";
 import '../assets/css/search.css'
-import fetchAircraftExtendedData from "../lib/focusOnAircraft";
-import { unFocusAircraft } from "../redux/actions";
+import { focusOnAirplane } from "../redux/thunks";
+import { unFocusAirplane } from "../redux/actions";
 import { MdSearch } from "react-icons/md";
 
 class Search extends Component {
@@ -97,12 +97,12 @@ const searchInStations = (stations, searchValue) => {
 }
 
 const mapDispatchToProps = {
-  fetchAircraftExtendedData,
-  unFocusAircraft
+  focusOnAirplane,
+  unFocusAirplane
 }
 
 const mapStateToProps = (state) => ({
-    allStations: state.allAircraft.pilots
+    onlineData: state.onlineData.pilots
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search)

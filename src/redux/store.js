@@ -11,7 +11,7 @@ const initalState = {
   pending: false,
   focused: false,
   error: null,
-  allAircraft: { pilots: [], atc: [] }
+  onlineData: { pilots: [], atc: [] }
 };
 
 const store = createStore(
