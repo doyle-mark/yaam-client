@@ -15,11 +15,11 @@ class MainContainer extends Component {
                         <TopBar theme={this.props.themeColors} isDarkMode={this.props.isDarkMode} height="5vh"></TopBar>
                     </Col>
                 </Row>
-                <Sidebar theme={this.props.themeColors} />
+                <Sidebar />
                 <Row noGutters theme={this.props.themeColors} style={{height: '94vh'}}>  
                     <Col>
                         <SettingsButton theme={this.props.themeColors} />
-                        <MapContainer theme={this.props.themeColors} />
+                        <MapContainer />
                     </Col>
                 </Row>
             </Container>

@@ -1,45 +1,29 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Details from "./sidebar_components/FlightDetails";
 import History from "./sidebar_components/FlightHistory";
 import '../assets/css/Sidebar.css'
+import PropTypes from 'prop-types'
 
-class Sidebar extends Component {
-    render() {
-        const { theme } = this.props;
+function Sidebar(props) {
+    const focused = useSelector(state => state.focused);
+    const theme = useSelector(state => state.settings.themeColors);
 
-        if(this.props.focused && this.props.focusedData != null) {
-            return(
-                <div className={"sidebar"} style={{backgroundColor: theme.secondary}}>
-                    <Details theme={theme} data={this.props.focusedData} />
-                    <History theme={theme} data={this.props.focusedData.trail} />
-                </div>
-                
-            )
-        } else {
-            return(
-                null
-            )
-        }
-    }
-
-    shouldComponentUpdate(){
-        const { pending } = this.props;
-        if (pending) {
-            return false;
-        }
-        return true;
+    if (focused) {
+        return(
+            <div className={"sidebar"} style={{backgroundColor: theme.secondary}}>
+                <Details theme={theme} data={focused} />
+                <History theme={theme} data={focused.trail} />
+            </div>
+        )
+    } else {
+        return null;
     }
 }
 
-const mapStateToProps = (state) => ({
-    pending: state.pending,
-    focused: state.focused,
-    focusedData: state.focusedData
-})
+Sidebar.propTypes = {
 
-const mapDispatchToProps = null;
+}
 
-export default connect(
-    mapStateToProps, mapDispatchToProps
-)(Sidebar)
+export default Sidebar
+

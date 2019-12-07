@@ -9,7 +9,7 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const initalState = {
   settings: loadSettings(),
   pending: false,
-  focused: false,
+  focused: null,
   error: null,
   onlineData: { pilots: [], atc: [] }
 };
