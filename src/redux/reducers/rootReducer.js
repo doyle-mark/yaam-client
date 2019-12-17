@@ -55,12 +55,22 @@ function rootReducer(state, action) {
                 pending: true
             }
         case FETCH_ALL_DATA_SUCCESS:
-            return {
+            const newState = {
                 ...state, 
                 pending: false,
                 // onlineData: { pilots: [action.payload.pilots[200]], atc: []}
-                onlineData: action.payload
+                onlineData: action.payload,
+                lastUpdated: Date.now()
             }
+            
+            if (state.initialLoading) {
+                return {
+                    ...newState,
+                    initialLoading: false
+                }
+            }
+            return newState;
+
         case FETCH_ALL_DATA_ERROR:
             return {
                 ...state, 

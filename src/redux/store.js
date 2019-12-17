@@ -8,6 +8,7 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const initalState = {
   settings: loadSettings(),
+  initialLoading: true,
   pending: false,
   focused: null,
   error: null,
