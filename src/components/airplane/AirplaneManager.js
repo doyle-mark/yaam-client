@@ -12,6 +12,10 @@ function AirplaneManager(props) {
   const { bounds, zoom } = props;
   useAirplaneData();
   const airplanes = useSelector(state => state.onlineData.pilots);
+  const focused = useSelector(state => state.focused)
+
+  let focusedCallsign = null;
+  if (focused) focusedCallsign = focused.callsign;
 
   return airplanes.map( (airplane, index) => {
     const { 
@@ -25,7 +29,7 @@ function AirplaneManager(props) {
       arr
     } = airplane
 
-    if (isInBounds(position, bounds)) {
+    if (isInBounds(position, bounds) || (focusedCallsign === callsign)) {
       return(
         <Airplane 
         zoom={zoom}
