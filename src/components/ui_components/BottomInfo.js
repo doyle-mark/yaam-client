@@ -7,6 +7,8 @@ import { ClipLoader } from "react-spinners";
 export default function BottomInfo() {
   const isPending = useSelector(state => state.pending);
   const lastUpdated = useSelector(state => state.lastUpdated);
+  const theme = useSelector(state => state.settings.themeColors);
+
   // const isPending = true;
   const override = css`
     position: absolute;
@@ -14,14 +16,14 @@ export default function BottomInfo() {
     left: 1%;
     z-index: 10000;
     ${'' /* opacity: 0.5 */}
-    color: white;
+    color: ${theme.textPrimary};
     font-family: 'Poppins';
   `;
   
   if (isPending) {
     return (
       <div css={override}>
-        <ClipLoader size={12} color="white"/>  Loading
+        <ClipLoader size={12} color={theme.textPrimary}/>  Loading
       </div>
     )
   } else {
