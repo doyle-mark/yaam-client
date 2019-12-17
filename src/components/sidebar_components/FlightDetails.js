@@ -91,14 +91,6 @@ export default class FlightHistory extends Component {
               <p style={{ fontSize: 14 }}>PILOT</p>
               <p style={{color: 'gray'}}>{name}</p>
             </div>
-            <div>
-              <p style={{ fontSize: 14 }}>FIELD 5</p>
-              <p style={{ color: "gray" }}>Value</p>
-            </div>
-            <div>
-              <p style={{ fontSize: 14 }}>FIELD 6</p>
-              <p style={{ color: "gray" }}>Value</p>
-            </div>
           </div>
         </CardBody>
       </Card>
