@@ -14,7 +14,6 @@ class Sidebar extends Component {
                     <Details theme={theme} data={this.props.focusedData} />
                     <History theme={theme} data={this.props.focusedData.trail} />
                 </div>
-                
             )
         } else {
             return(

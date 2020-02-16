@@ -64,7 +64,7 @@ class MapContainer extends Component {
         minZoom={DEFAULT_ZOOM_LEVEL}
         id="mapid"
         doubleClickZoom={false}
-        style={{ height: "100%" }}
+        style={{ height: "94vh" }}
         zoomControl={false}
         preferCanvas={false}
       >
@@ -113,9 +113,7 @@ class MapContainer extends Component {
 
   // Adds leaflet listener that updates the bounds in our state.
   addBoundsChangeListener = () => {
-    this.refs.map.leafletElement.on("moveend", e => {
-      console.log("bounds update");
-      
+    this.refs.map.leafletElement.on("moveend", e => {      
       const map = e.target;
       const zoom = map.getZoom();
       const center = map.getCenter();

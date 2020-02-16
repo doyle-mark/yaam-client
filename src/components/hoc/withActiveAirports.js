@@ -21,7 +21,6 @@ const withActiveAirports = (WrappedComponent) => {
     }
     
     createActiveAirportArray = memoize((pilotData, atcData, airportData) => {
-      console.time('createActiveAirportArray');
       const activeAirports = {};
 
       if (!pilotData || !atcData) return null;
@@ -80,7 +79,6 @@ const withActiveAirports = (WrappedComponent) => {
           }
         }
       });
-      console.timeEnd('createActiveAirportArray');
       return activeAirports;
     });
     
