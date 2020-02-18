@@ -1,5 +1,6 @@
 .sidebar {
     position: absolute;
+    top: 6vh;
     height: 94vh;
     z-index: 1000;
     padding: 1rem;
